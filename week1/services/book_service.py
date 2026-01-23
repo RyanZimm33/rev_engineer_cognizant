@@ -1,0 +1,16 @@
+from doctest import REPORT_CDIFF
+from week1.repositories.book_repository_protocol import BookRepositoryProtocol
+from week1.domain.book import Book
+
+class BookService:
+    def __init__(self, repo: BookRepositoryProtocol):
+        self.repo = repo
+
+    def get_all_books(self) -> list[Book]:
+        return self.repo.get_all_books()
+    
+    def add_book(self, book:Book) -> str:
+        return self.repo.add_book(book)
+    
+    def find_book_by_name(self, query) -> list[Book]:
+        return self.repo.find_book_by_name(query)
