@@ -3,7 +3,6 @@ from token import OP
 from typing import Optional
 import uuid
 
-from pyparsing import Opt
 
 @dataclass
 class Book:
@@ -26,12 +25,12 @@ class Book:
 
     def check_out(self):
         if not self.available:
-            raise Exception('Book is already checked out. ')
+            raise Exception('Book is already checked out.')
         self.available = False
     
     def check_in(self):
         if self.available:
-            raise Exception('Book is already available')
+            raise Exception('Book is already available.')
         self.available = True
     
     @classmethod

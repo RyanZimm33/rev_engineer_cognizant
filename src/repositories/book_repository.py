@@ -1,6 +1,6 @@
 import json
-from week1.domain.book import Book
-from week1.repositories.book_repository_protocol import BookRepositoryProtocol
+from src.domain.book import Book
+from src.repositories.book_repository_protocol import BookRepositoryProtocol
 
 class BookRepository(BookRepositoryProtocol):
     def __init__(self, filepath: str="books.json"):

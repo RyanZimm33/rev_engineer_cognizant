@@ -1,7 +1,7 @@
 import json
 import random
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime
 
 def generate_books_json(filename = 'book.json', count = 500):
     genres = [

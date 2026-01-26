@@ -1,7 +1,7 @@
-from week1.repositories.book_repository import BookRepository
-from week1.services.book_generator_service import generate_books_json
-from week1.domain.book import Book
-from week1.services.book_service import BookService
+from .repositories.book_repository import BookRepository
+from .services.book_generator_service import generate_books_json
+from .domain.book import Book
+from .services.book_service import BookService
 
 class BookREPL:
     def __init__(self, book_service):

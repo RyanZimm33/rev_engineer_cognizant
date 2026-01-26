@@ -1,6 +1,6 @@
 from doctest import REPORT_CDIFF
-from week1.repositories.book_repository_protocol import BookRepositoryProtocol
-from week1.domain.book import Book
+from src.repositories.book_repository_protocol import BookRepositoryProtocol
+from src.domain.book import Book
 
 class BookService:
     def __init__(self, repo: BookRepositoryProtocol):
@@ -13,4 +13,6 @@ class BookService:
         return self.repo.add_book(book)
     
     def find_book_by_name(self, query) -> list[Book]:
+        if not isinstance(query, str):
+            raise TypeError('Expected String, got something else')
         return self.repo.find_book_by_name(query)
