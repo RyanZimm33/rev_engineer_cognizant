@@ -1,13 +1,15 @@
 from src.repositories.book_repository import BookRepository
 from src.services.book_generator_service import generate_books_json
 from src.domain.book import Book
+from src.services.book_analytics_service import BookAnalyticsService
 from src.services.book_service import BookService
 import requests
 
 class BookREPL:
-    def __init__(self, book_service):
+    def __init__(self, book_service, book_analytics_service):
         self.running = True
         self.book_service = book_service
+        self.book_analytics_service = book_analytics_service
 
     def start(self):
         print("Welcome to the Book App, type help for command list")
@@ -20,7 +22,7 @@ class BookREPL:
             self.running = False
             print("Goodbye.")
         elif cmd == 'help':
-            print("Available commands: addBook, getAllRecords, findByName, help, exit")
+            print("Available commands: addBook, getAllRecords, findByName, getJoke, getAveragePrice, getTopBooks, getValueScores help, exit")
         elif cmd == 'addBook':
             self.add_book()
         elif cmd == 'getAllRecords':
@@ -29,6 +31,12 @@ class BookREPL:
             self.find_book_by_name()
         elif cmd == 'getJoke':
             self.get_joke()
+        elif cmd == "getAveragePrice":
+            self.get_average_price()
+        elif cmd == "getTopBooks":
+            self.get_top_books()
+        elif cmd == "getValueScores":
+            self.get_value_scores()
         else:
             print("Invalid Command")
 
@@ -44,6 +52,21 @@ class BookREPL:
             print(f'HTTP Error: {e}')
         except requests.exceptions.RequestException as e:
             print(f'Something else went wrong: {e}')
+    
+    def get_average_price(self):
+        books = self.book_service.get_all_books()
+        avg_price = self.book_analytics_service.average_price(books)
+        print(avg_price)
+
+    def get_top_books(self):
+        books = self.book_service.get_all_books()
+        top_books = self.book_analytics_service.top_rated(books)
+        print(top_books)
+
+    def get_value_scores(self):
+        books = self.book_service.get_all_books()
+        value_scores = self.book_analytics_service.value_scores(books)
+        print(value_scores)
     
     def get_all_records(self):
         books = self.book_service.get_all_books()
@@ -69,6 +92,7 @@ if __name__ == '__main__':
     generate_books_json()
     repo = BookRepository('book.json')
     book_srv = BookService(repo)
-    repl = BookREPL(book_srv)
+    book_analytics_srv = BookAnalyticsService()
+    repl = BookREPL(book_srv, book_analytics_srv)
     repl.start()
 

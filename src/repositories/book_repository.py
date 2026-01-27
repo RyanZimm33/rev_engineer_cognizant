@@ -14,7 +14,7 @@ class BookRepository(BookRepositoryProtocol):
     def add_book(self, book:Book) -> str:
         books = self.get_all_books()
         books.append(book)
-        with open(self.filepath, 'w', encoding='utf-8') as f:       #Open file as wrightable
+        with open(self.filepath, 'w', encoding='utf-8') as f:       #Open file as writable
             json.dump([b.to_dict() for b in books], f, indent=2)    #Convert Book datatype to json serializable type via list comprehension
         return book.book_id
     
