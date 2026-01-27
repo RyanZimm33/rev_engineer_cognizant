@@ -1,7 +1,8 @@
-from .repositories.book_repository import BookRepository
-from .services.book_generator_service import generate_books_json
-from .domain.book import Book
-from .services.book_service import BookService
+from src.repositories.book_repository import BookRepository
+from src.services.book_generator_service import generate_books_json
+from src.domain.book import Book
+from src.services.book_service import BookService
+import requests
 
 class BookREPL:
     def __init__(self, book_service):
@@ -26,10 +27,24 @@ class BookREPL:
             self.get_all_records()
         elif cmd == 'findByName':
             self.find_book_by_name()
+        elif cmd == 'getJoke':
+            self.get_joke()
         else:
             print("Invalid Command")
 
-
+    def get_joke(self):
+        try:
+            url = 'https://api.chucknorris.io/jokes/random'
+            response = requests.get(url, timeout=5)
+            response.raise_for_status()
+            print(response.json()['value'])
+        except requests.exceptions.Timeout:
+            print('Request timed out.')
+        except requests.exceptions.HTTPError as e:
+            print(f'HTTP Error: {e}')
+        except requests.exceptions.RequestException as e:
+            print(f'Something else went wrong: {e}')
+    
     def get_all_records(self):
         books = self.book_service.get_all_books()
         print(books)
