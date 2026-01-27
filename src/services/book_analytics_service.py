@@ -30,6 +30,14 @@ class BookAnalyticsService:
             for book, score in zip(books, scores)      #Iterate over books and scores in parralel, add the book.bookid and score to the dictionary
         }
     
+    def median_price_by_genre(self, books: list[Book], genres: list[str]) -> dict[str, float]:
+        book_prices = np.array([b.price_usd for b in books])
+        book_genres = np.array([b.genre for b in books])
 
-
-
+        genre_medians = {}
+        for genre in genres:
+            mask = book_genres == genre
+            genre_filtered_book_prices = np.array(book_prices)[mask]
+            genre_medians[genre] = np.median(genre_filtered_book_prices)
+        
+        return genre_medians

@@ -13,7 +13,8 @@ def test_average_price():
 
 
 def test_top_rated():
-    books = [Book(title = "test", author = "author", rating= 1, rating_count=2000), Book(title = "test2", author = "author", rating=0, rating_count=2000)]
+    books = [Book(title = "test", author = "author", rating= 1, rating_count=2000), 
+             Book(title = "test2", author = "author", rating=0, rating_count=2000)]
     srv = BookAnalyticsService()
 
     top_books = srv.top_rated(books)
@@ -23,11 +24,26 @@ def test_top_rated():
     assert top_books[1].title == "test2"
 
 def test_value_scores():
-    books = [Book(book_id= "test", title = "test", author = "author", rating= 1, rating_count=1000, price_usd=50), Book(book_id= "test2", title = "test",  author = "author", rating=.8, rating_count=2000, price_usd=60)]
+    books = [Book(book_id= "test", title = "test", author = "author", rating= 1, rating_count=1000, price_usd=50), 
+             Book(book_id= "test2", title = "test",  author = "author", rating=.8, rating_count=2000, price_usd=60)]
     srv = BookAnalyticsService()
 
     book_values = srv.value_scores(books).keys()
 
     assert len(book_values) == 2
+
+def test_median_price_by_genre():
+    genres = ["Fantasy", "History"]
+    books = [Book(title= "test", author = "test", genre="History", price_usd=50), 
+             Book(title= "test2",author = "test", genre="History", price_usd=51), 
+             Book(title= "test3", author = "test", genre="Fantasy", price_usd=50)]
+    srv = BookAnalyticsService()
+
+    median_prices = srv.median_price_by_genre(books, genres)
+
+    assert len(median_prices) == 2
+    assert median_prices["Fantasy"] == 50.0
+    assert median_prices["History"] == 50.5
+
 
     

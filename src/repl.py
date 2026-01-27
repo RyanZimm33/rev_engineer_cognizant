@@ -22,7 +22,7 @@ class BookREPL:
             self.running = False
             print("Goodbye.")
         elif cmd == 'help':
-            print("Available commands: addBook, getAllRecords, findByName, getJoke, getAveragePrice, getTopBooks, getValueScores help, exit")
+            print("Available commands: addBook, getAllRecords, findByName, getJoke, getAveragePrice, getTopBooks, getValueScores, getMedianPriceByGenre, help, exit")
         elif cmd == 'addBook':
             self.add_book()
         elif cmd == 'getAllRecords':
@@ -37,6 +37,8 @@ class BookREPL:
             self.get_top_books()
         elif cmd == "getValueScores":
             self.get_value_scores()
+        elif cmd == "getMedianPriceByGenre":
+            self.get_median_price_by_genre()
         else:
             print("Invalid Command")
 
@@ -67,6 +69,20 @@ class BookREPL:
         books = self.book_service.get_all_books()
         value_scores = self.book_analytics_service.value_scores(books)
         print(value_scores)
+    
+    def get_median_price_by_genre(self):
+        books = self.book_service.get_all_books()
+        genres = [
+        'Fantasy',
+        'Sci-Fi',
+        'Non-Fiction',
+        'Mystery',
+        'Romance',
+        'Technology',
+        'History'
+        ]
+        median_prices = self.book_analytics_service.median_price_by_genre(books, genres)
+        print(median_prices)
     
     def get_all_records(self):
         books = self.book_service.get_all_books()
