@@ -45,5 +45,13 @@ def test_median_price_by_genre():
     assert median_prices["Fantasy"] == 50.0
     assert median_prices["History"] == 50.5
 
+def test_most_popular_genre_2026():
+    books = [Book(title= "test", author = "test", genre="History", price_usd=50, last_checkout="2025"), 
+             Book(title= "test2",author = "test", genre="History", price_usd=51, last_checkout="2025"), 
+             Book(title= "test3", author = "test", genre="Fantasy", price_usd=50, last_checkout="2026")]
+    srv = BookAnalyticsService()
 
+    popular_genre = srv.most_popular_genre_2026(books)
+
+    assert popular_genre == "Fantasy: 1"
     

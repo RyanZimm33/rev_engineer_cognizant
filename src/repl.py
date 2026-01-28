@@ -22,7 +22,7 @@ class BookREPL:
             self.running = False
             print("Goodbye.")
         elif cmd == 'help':
-            print("Available commands: addBook, getAllRecords, findByName, getJoke, getAveragePrice, getTopBooks, getValueScores, getMedianPriceByGenre, help, exit")
+            print("Available commands: addBook, getAllRecords, findByName, getJoke, getAveragePrice, getTopBooks, getValueScores, getMedianPriceByGenre, getMostPopularGenre2026, help, exit")
         elif cmd == 'addBook':
             self.add_book()
         elif cmd == 'getAllRecords':
@@ -39,6 +39,8 @@ class BookREPL:
             self.get_value_scores()
         elif cmd == "getMedianPriceByGenre":
             self.get_median_price_by_genre()
+        elif cmd == "getMostPopularGenre2026":
+            self.get_most_popular_genre_2026()
         else:
             print("Invalid Command")
 
@@ -72,17 +74,13 @@ class BookREPL:
     
     def get_median_price_by_genre(self):
         books = self.book_service.get_all_books()
-        genres = [
-        'Fantasy',
-        'Sci-Fi',
-        'Non-Fiction',
-        'Mystery',
-        'Romance',
-        'Technology',
-        'History'
-        ]
-        median_prices = self.book_analytics_service.median_price_by_genre(books, genres)
+        median_prices = self.book_analytics_service.median_price_by_genre(books)
         print(median_prices)
+    
+    def get_most_popular_genre_2026(self):
+        books = self.book_service.get_all_books()
+        most_popular = self.book_analytics_service.most_popular_genre_2026(books)
+        print(most_popular)
     
     def get_all_records(self):
         books = self.book_service.get_all_books()

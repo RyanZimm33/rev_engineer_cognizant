@@ -29,15 +29,33 @@ class BookAnalyticsService:
             book.book_id: float(score)
             for book, score in zip(books, scores)      #Iterate over books and scores in parralel, add the book.bookid and score to the dictionary
         }
-    
-    def median_price_by_genre(self, books: list[Book], genres: list[str]) -> dict[str, float]:
+
+    def median_price_by_genre(self, books: list[Book]) -> dict[str, float]:
         book_prices = np.array([b.price_usd for b in books])
         book_genres = np.array([b.genre for b in books])
+        unique_genres = np.unique(book_genres)
 
         genre_medians = {}
-        for genre in genres:
+        for genre in unique_genres:
             mask = book_genres == genre
             genre_filtered_book_prices = np.array(book_prices)[mask]
             genre_medians[genre] = np.median(genre_filtered_book_prices)
         
         return genre_medians
+    
+    def most_popular_genre_2026(self, books: list[Book]) -> str:
+        book_genres = np.array([b.genre for b in books])
+        book_checkout = np.array([b.last_checkout[:4] for b in books])
+        mask = book_checkout == "2026"
+        unique_genres, counts = np.unique(book_genres[mask], return_counts=True)
+        
+        most_popular = ""
+        max_count = 0
+        for i in range(len(unique_genres)):
+            if counts[i] > max_count:
+                max_count = counts[i]
+                most_popular = unique_genres[i]
+
+        return most_popular + ": " + str(max_count)
+
+
