@@ -33,13 +33,12 @@ def test_value_scores():
     assert len(book_values) == 2
 
 def test_median_price_by_genre():
-    genres = ["Fantasy", "History"]
     books = [Book(title= "test", author = "test", genre="History", price_usd=50), 
              Book(title= "test2",author = "test", genre="History", price_usd=51), 
              Book(title= "test3", author = "test", genre="Fantasy", price_usd=50)]
     srv = BookAnalyticsService()
 
-    median_prices = srv.median_price_by_genre(books, genres)
+    median_prices = srv.median_price_by_genre(books)
 
     assert len(median_prices) == 2
     assert median_prices["Fantasy"] == 50.0
