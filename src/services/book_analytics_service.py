@@ -3,10 +3,18 @@ from src.domain.book import Book
 
 class BookAnalyticsService:
     def average_price(self, books : list[Book]) -> float:
+        if not isinstance(books, list) or not all(isinstance(b, Book) for b in books):
+            raise TypeError('Expected a Book list, got something else')
         prices = np.array([b.price_usd for b in books], dtype = float)  #Create array of book prices for all books
         return prices.mean()
     
     def top_rated(self, books: list[Book], min_ratings: int = 1000, limit: int = 10) -> list[Book]:  #Return a list of books of size limit with the highest average rating and a ratings_count of atleast min_ratings
+        if not isinstance(books, list) or not all(isinstance(b, Book) for b in books):
+            raise TypeError('Expected a Book list, got something else')
+        if not (isinstance(min_ratings, int) or isinstance(limit, int)):
+            raise TypeError('Expected an int, got something else')
+         
+         
         ratings = np.array([b.rating for b in books])    #nparray of the average_rating of all books
         counts = np.array([b.rating_count for b in books])     #nparray of the ratings_count of all books
 
@@ -18,6 +26,8 @@ class BookAnalyticsService:
         return filteredBooks[sorted_idx].tolist()[:limit] #Return list of filtered and sorted books up to limit
 
     def value_scores(self, books: list[Book]) -> dict[str, float]:
+        if not isinstance(books, list) or not all(isinstance(b, Book) for b in books):
+            raise TypeError('Expected a Book list, got something else')
         ratings = np.array([b.rating for b in books])    
         counts = np.array([b.rating_count for b in books])     
         prices = np.array([b.price_usd for b in books])
@@ -31,6 +41,8 @@ class BookAnalyticsService:
         }
 
     def median_price_by_genre(self, books: list[Book]) -> dict[str, float]:
+        if not isinstance(books, list) or not all(isinstance(b, Book) for b in books):
+            raise TypeError('Expected a Book list, got something else')
         book_prices = np.array([b.price_usd for b in books])
         book_genres = np.array([b.genre for b in books])
         unique_genres = np.unique(book_genres)
@@ -44,9 +56,11 @@ class BookAnalyticsService:
         return genre_medians
     
     def most_popular_genre_2026(self, books: list[Book]) -> str:
+        if not isinstance(books, list) or not all(isinstance(b, Book) for b in books):
+            raise TypeError('Expected a Book list, got something else')
         book_genres = np.array([b.genre for b in books])
-        book_checkout = np.array([b.last_checkout[:4] for b in books])
-        mask = book_checkout == "2026"
+        book_date = np.array([b.publication_year for b in books])
+        mask = book_date == "2026"
         unique_genres, counts = np.unique(book_genres[mask], return_counts=True)
         
         most_popular = ""

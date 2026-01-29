@@ -22,11 +22,15 @@ class BookREPL:
             self.running = False
             print("Goodbye.")
         elif cmd == 'help':
-            print("Available commands: addBook, getAllRecords, findByName, getJoke, getAveragePrice, getTopBooks, getValueScores, getMedianPriceByGenre, getMostPopularGenre2026, help, exit")
+            print("Available commands: addBook, getAllRecords, updateBook, deleteBook, findByName, getJoke, getAveragePrice, getTopBooks, getValueScores, getMedianPriceByGenre, getMostPopularGenre2026, help, exit")
         elif cmd == 'addBook':
             self.add_book()
         elif cmd == 'getAllRecords':
             self.get_all_records()
+        elif cmd == 'updateBook':
+            self.update_book()
+        elif cmd == 'deleteBook':
+            self.delete_book()
         elif cmd == 'findByName':
             self.find_book_by_name()
         elif cmd == 'getJoke':
@@ -58,30 +62,65 @@ class BookREPL:
             print(f'Something else went wrong: {e}')
     
     def get_average_price(self):
-        books = self.book_service.get_all_books()
-        avg_price = self.book_analytics_service.average_price(books)
-        print(avg_price)
+        try:
+            books = self.book_service.get_all_books()
+            avg_price = self.book_analytics_service.average_price(books)
+            print(avg_price)
+        except Exception as e:
+            print(f'An unexpected error has occurred {e}')
 
     def get_top_books(self):
-        books = self.book_service.get_all_books()
-        top_books = self.book_analytics_service.top_rated(books)
-        print(top_books)
+        try:
+            books = self.book_service.get_all_books()
+            top_books = self.book_analytics_service.top_rated(books)
+            print(top_books)
+        except Exception as e:
+            print(f'An unexpected error has occurred {e}')
 
     def get_value_scores(self):
-        books = self.book_service.get_all_books()
-        value_scores = self.book_analytics_service.value_scores(books)
-        print(value_scores)
+        try:
+            books = self.book_service.get_all_books()
+            value_scores = self.book_analytics_service.value_scores(books)
+            print(value_scores)
+        except Exception as e:
+            print(f'An unexpected error has occurred {e}')
     
     def get_median_price_by_genre(self):
-        books = self.book_service.get_all_books()
-        median_prices = self.book_analytics_service.median_price_by_genre(books)
-        print(median_prices)
+        try:
+            books = self.book_service.get_all_books()
+            median_prices = self.book_analytics_service.median_price_by_genre(books)
+            print(median_prices)
+        except Exception as e:
+            print(f'An unexpected error has occurred {e}')
     
     def get_most_popular_genre_2026(self):
-        books = self.book_service.get_all_books()
-        most_popular = self.book_analytics_service.most_popular_genre_2026(books)
-        print(most_popular)
+        try:
+            books = self.book_service.get_all_books()
+            most_popular = self.book_analytics_service.most_popular_genre_2026(books)
+            print(most_popular)
+        except Exception as e:
+            print(f'An unexpected error has occurred {e}')
     
+    def delete_book(self):
+        try:
+            query = input('Please enter the name of the book to delete: ')
+            deleted_book_id = self.book_service.delete_book(query)
+            print(deleted_book_id)
+        except Exception as e:
+            print(f'An unexpected error has occurred {e}')
+        
+    def update_book(self):
+        try:
+            query = input('Please enter the name of the book to update: ')
+            print("Enter Book Details")
+            title = input('Title: ')
+            author = input('Author: ')
+            book = Book(title= title, author=author)
+            updated_book_id = self.book_service.update_book(query, book)
+            print(updated_book_id)
+        except Exception as e:
+            print(f'An unexpected error has occurred {e}')
+
     def get_all_records(self):
         books = self.book_service.get_all_books()
         print(books)
@@ -98,9 +137,12 @@ class BookREPL:
             print(f'An unexpected error has occurred {e}')
     
     def find_book_by_name(self):
-        query = input('Please enter book name: ')
-        books = self.book_service.find_book_by_name(query)
-        print(books)
+        try:
+            query = input('Please enter book name: ')
+            books = self.book_service.find_book_by_name(query)
+            print(books)
+        except Exception as e:
+            print(f'An unexpected error has occurred {e}')
 
 if __name__ == '__main__':
     generate_books_json()

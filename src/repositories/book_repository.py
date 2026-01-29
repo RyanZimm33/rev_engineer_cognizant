@@ -18,6 +18,13 @@ class BookRepository(BookRepositoryProtocol):
             json.dump([b.to_dict() for b in books], f, indent=2)    #Convert Book datatype to json serializable type via list comprehension
         return book.book_id
     
-    def find_book_by_name(self, query) -> list[Book]:
+    def find_book_by_name(self, query:str) -> list[Book]:
         books = self.get_all_books()
         return [b for b in books if b.title == query]
+    
+    def delete_book(self, book:Book) -> str:
+        books = self.get_all_books()
+        books.remove(book)
+        with open(self.filepath, 'w', encoding='utf-8') as f: 
+            json.dump([b.to_dict() for b in books], f, indent=2)
+        return book.book_id

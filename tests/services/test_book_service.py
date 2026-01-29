@@ -3,7 +3,7 @@ from src.domain.book import Book
 from src.services.book_service import BookService
 from tests.mocks.mock_book_repository import MockBookRepo
 
-#Positive Test: Give correct data, check for correct output
+
 def test_get_all_books_positive():
     # AAA - arrange, act, assert
 
@@ -19,7 +19,17 @@ def test_get_all_books_positive():
     assert books[0].title == "test"
     assert books[0].author == "author"
 
-#Negative Test: Give incorrect data, ensure it is handled gracefully
+def test_find_book_by_name_positive():
+    query = "test"
+    repo = MockBookRepo()
+    svc = BookService(repo)
+
+    book = svc.find_book_by_name(query)
+
+    assert book[0].title == "test"
+    assert book[0].author == "author"
+
+
 def test_find_book_name_negative():
     name = 3
     repo = MockBookRepo()
@@ -29,7 +39,7 @@ def test_find_book_name_negative():
         svc.find_book_by_name(name)
         assert str(e.value) == 'Expected str, got something else'
 
-def test_add_book():
+def test_add_book_positive():
     repo = MockBookRepo()
     svc = BookService(repo)
     book = Book(title="test", author="author")
@@ -38,12 +48,49 @@ def test_add_book():
 
     assert book_id == "mock_id"
 
-def test_find_book_by_name():
-    query = "test"
+def test_add_book_negative():
+    not_a_book = "book"
     repo = MockBookRepo()
     svc = BookService(repo)
 
-    book = svc.find_book_by_name(query)
+    with pytest.raises(TypeError) as e:
+        svc.add_book(not_a_book)
+        assert str(e.value) == 'Expected Book, got something else'
 
-    assert book[0].title == "test"
-    assert book[0].author == "author"
+def test_delete_book_positive():
+    query = "book"
+    repo = MockBookRepo()
+    svc = BookService(repo)
+
+    book_id = svc.delete_book(query)
+
+    assert book_id == 'mock_id'
+
+def test_delete_book_negative():
+    query = 1
+    repo = MockBookRepo()
+    svc = BookService(repo)
+
+    with pytest.raises(TypeError) as e:
+        svc.delete_book(query)
+        assert str(e.value) == 'Expected string, got something else'
+
+def test_update_book_positive():
+    query = "book"
+    book = Book(title="test", author="author")
+    repo = MockBookRepo()
+    svc = BookService(repo)
+
+    book_id = svc.update_book(query, book)
+
+    assert book_id == 'mock_id'
+
+def test_update_book_negative():
+    query = "book"
+    book = 2
+    repo = MockBookRepo()
+    svc = BookService(repo)
+
+    with pytest.raises(TypeError) as e:
+        svc.update_book(query, book)
+        assert str(e.value) == 'Expected book, got something else'
