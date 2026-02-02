@@ -1,4 +1,3 @@
-import pytest
 from src.domain.book import Book
 from src.repositories.book_repository import BookRepository
 

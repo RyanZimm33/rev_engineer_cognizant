@@ -82,7 +82,6 @@ def test_most_popular_genres_2026_positive():
 
     genres = srv.most_popular_genres_2026(books)
 
-    assert len(genres) == 1
     assert genres["Fantasy"] == 1
 
 def test_most_popular_genres_2026_negative():

@@ -1,4 +1,3 @@
-import pytest
 from src.domain.checkout_history import CheckoutHistory
 from src.repositories.checkout_history_repository import CheckoutHistoryRepository
 
