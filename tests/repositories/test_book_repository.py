@@ -3,7 +3,7 @@ from src.domain.book import Book
 from src.repositories.book_repository import BookRepository
 
 def test_get_all_books():
-    testing_file = "tests/test.json"
+    testing_file = "tests/test_book.json"
     repo = BookRepository(testing_file)
 
     books = repo.get_all_books()
@@ -12,7 +12,7 @@ def test_get_all_books():
     assert books[1].title == "test2"
 
 def test_add_book():
-    testing_file = "tests/test.json"
+    testing_file = "tests/test_book.json"
     repo = BookRepository(testing_file)
     book = Book(book_id="test3", title="test3", author="test")
 
@@ -21,7 +21,7 @@ def test_add_book():
     assert book_id == "test3"
 
 def test_find_book_by_name():
-    testing_file = "tests/test.json"
+    testing_file = "tests/test_book.json"
     repo = BookRepository(testing_file)
     query = "test"
 
@@ -30,7 +30,7 @@ def test_find_book_by_name():
     assert books[0].title == "test"
 
 def test_delete_book():
-    testing_file = "tests/test.json"
+    testing_file = "tests/test_book.json"
     repo = BookRepository(testing_file)
     
     book = Book(book_id= "to_delete",

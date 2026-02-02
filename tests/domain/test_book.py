@@ -1,13 +1,13 @@
-from ast import Dict
 import pytest
-from src.domain.book import *
+from src.domain.book import Book
 
 def test_check_out_positive():
-    book = Book(title="test", author="author", available=True)
+    book = Book(title="test", author="author", available=True, last_checkout="2030-01-28T17:45:41.055901")
 
-    book.check_out()
+    check_out_time = book.check_out()
 
     assert not book.available
+    assert check_out_time == "2032-01-28T17:45:41.055901"
 
 
 def test_check_out_negative():
@@ -18,11 +18,12 @@ def test_check_out_negative():
         assert str(e.value) == 'Book is already checked out.'
 
 def test_check_in_positive():
-    book = Book(title="test", author="author", available=False)
+    book = Book(title="test", author="author", available=False, last_checkout="2030-01-28T17:45:41.055901")
 
-    book.check_in()
+    check_in_time = book.check_in()
 
     assert book.available
+    assert check_in_time == "2031-01-28T17:45:41.055901"
 
 
 def test_check_in_negative():

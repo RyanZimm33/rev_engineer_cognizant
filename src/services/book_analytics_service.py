@@ -55,21 +55,14 @@ class BookAnalyticsService:
         
         return genre_medians
     
-    def most_popular_genre_2026(self, books: list[Book]) -> str:
+    def most_popular_genres_2026(self, books: list[Book]) -> dict[str, int]:
         if not isinstance(books, list) or not all(isinstance(b, Book) for b in books):
             raise TypeError('Expected a Book list, got something else')
         book_genres = np.array([b.genre for b in books])
         book_date = np.array([b.publication_year for b in books])
-        mask = book_date == "2026"
+        mask = book_date == 2026
         unique_genres, counts = np.unique(book_genres[mask], return_counts=True)
-        
-        most_popular = ""
-        max_count = 0
-        for i in range(len(unique_genres)):
-            if counts[i] > max_count:
-                max_count = counts[i]
-                most_popular = unique_genres[i]
 
-        return most_popular + ": " + str(max_count)
+        return dict(zip(unique_genres, counts))
 
 

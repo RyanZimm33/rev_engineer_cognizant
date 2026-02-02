@@ -23,15 +23,20 @@ class Book:
     available: Optional[bool] = None
     book_id: str = field(default_factory=lambda: str(uuid.uuid4()))
 
-    def check_out(self):
+    def check_out(self) -> str:
         if not self.available:
             raise Exception('Book is already checked out.')
+        
         self.available = False
+        self.last_checkout =  str(int(self.last_checkout[:4]) + 2) + self.last_checkout[4:]
+        return self.last_checkout
     
-    def check_in(self):
+    def check_in(self) -> str:
         if self.available:
             raise Exception('Book is already available.')
         self.available = True
+        check_in_time = str(int(self.last_checkout[:4]) + 1) + self.last_checkout[4:]
+        return check_in_time
     
     @classmethod
     def from_dict(cls, data:dict) -> 'Book':     #Match dictionary data to book class

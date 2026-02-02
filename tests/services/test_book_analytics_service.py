@@ -74,20 +74,21 @@ def test_median_price_by_genre_negative():
         svc.median_price_by_genre(books)
         assert str(e.value) == 'Expected a Book list, got something else'
 
-def test_most_popular_genre_2026_positive():
+def test_most_popular_genres_2026_positive():
     books = [Book(title= "test", author = "test", genre="History", price_usd=50, publication_year="2025"), 
              Book(title= "test2",author = "test", genre="History", price_usd=51, publication_year="2025"), 
              Book(title= "test3", author = "test", genre="Fantasy", price_usd=50, publication_year="2026")]
     srv = BookAnalyticsService()
 
-    popular_genre = srv.most_popular_genre_2026(books)
+    genres = srv.most_popular_genres_2026(books)
 
-    assert popular_genre == "Fantasy: 1"
+    assert len(genres) == 1
+    assert genres["Fantasy"] == 1
 
-def test_most_popular_genre_2026_negative():
+def test_most_popular_genres_2026_negative():
     books = [1,2]
     svc = BookAnalyticsService()
 
     with pytest.raises(TypeError) as e:
-        svc.most_popular_genre_2026(books)
+        svc.most_popular_genres_2026(books)
         assert str(e.value) == 'Expected a Book list, got something else'   
