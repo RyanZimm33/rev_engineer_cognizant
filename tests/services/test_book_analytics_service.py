@@ -75,9 +75,9 @@ def test_median_price_by_genre_negative():
         assert str(e.value) == 'Expected a Book list, got something else'
 
 def test_most_popular_genres_2026_positive():
-    books = [Book(title= "test", author = "test", genre="History", price_usd=50, publication_year="2025"), 
-             Book(title= "test2",author = "test", genre="History", price_usd=51, publication_year="2025"), 
-             Book(title= "test3", author = "test", genre="Fantasy", price_usd=50, publication_year="2026")]
+    books = [Book(title= "test", author = "test", genre="History", price_usd=50, publication_year=2025), 
+             Book(title= "test2",author = "test", genre="History", price_usd=51, publication_year=2025), 
+             Book(title= "test3", author = "test", genre="Fantasy", price_usd=50, publication_year=2026)]
     srv = BookAnalyticsService()
 
     genres = srv.most_popular_genres_2026(books)

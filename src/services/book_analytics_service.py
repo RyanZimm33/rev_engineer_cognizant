@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from src.domain.book import Book
 
 class BookAnalyticsService:
@@ -62,7 +63,31 @@ class BookAnalyticsService:
         book_date = np.array([b.publication_year for b in books])
         mask = book_date == 2026
         unique_genres, counts = np.unique(book_genres[mask], return_counts=True)
+        dictionary = dict(zip(unique_genres, counts))
+        return {k: v for k, v in sorted(dictionary.items(), key=lambda item: item[1])}
+    
+    def highest_rated_genres(self, books: list[Book]) -> dict[str, int]:
+        if not isinstance(books, list) or not all(isinstance(b, Book) for b in books):
+            raise TypeError('Expected a Book list, got something else')
+        book_dicts = [book.to_dict() for book in books]
+        book_genres = np.unique(np.array([b.genre for b in books]))
+        df = pd.DataFrame(data=book_dicts)  
+        median_ratings_count = df.groupby("genre")["rating_count"].median()
+        mean_average_rating = df.groupby("genre")["rating"].mean()
+        mean_average_rating_all_books = df["rating"].mean()
+        m = 50
 
-        return dict(zip(unique_genres, counts))
+        weighted_rating = (median_ratings_count / (median_ratings_count + m)) * mean_average_rating + (m / (median_ratings_count + m)) * mean_average_rating_all_books
 
+        dictionary = dict(zip(book_genres, weighted_rating))
+        return {k: v for k, v in sorted(dictionary.items(), key=lambda item: item[1])}
+
+    def rating_vs_price(self, books: list[Book]) -> dict[float, float]:
+        if not isinstance(books, list) or not all(isinstance(b, Book) for b in books):
+            raise TypeError('Expected a Book list, got something else')
+        price = [b.price_usd for b in books]
+        release = [b.rating for b in books]
+
+        return dict(zip(price, release))
+        
 

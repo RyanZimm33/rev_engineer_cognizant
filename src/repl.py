@@ -55,6 +55,14 @@ class BookREPL:
             self.get_median_price_by_genre()
         elif cmd == "mostPopularGenres2026":
             self.get_most_popular_genres_2026()
+        elif cmd == "highestRatedGenres":
+            self.get_highest_rated_genres()
+        elif cmd == "ratingVsPrice":
+            self.get_rating_vs_price()
+        elif cmd == "releasesByYear":
+            pass
+        elif cmd == "availableVsUnavailable":
+            pass
         elif cmd == "checkIn":
             self.check_in()
         elif cmd == "checkOut":
@@ -116,6 +124,22 @@ class BookREPL:
             books = self.book_service.get_all_books()
             data = self.book_analytics_service.most_popular_genres_2026(books)
             self.chart_service.bar_chart("Genres", "Number Published", data)
+        except Exception as e:
+            print(f'An unexpected error has occurred {e}')
+    
+    def get_highest_rated_genres(self):
+        try:
+            books = self.book_service.get_all_books()
+            data = self.book_analytics_service.highest_rated_genres(books)
+            self.chart_service.bar_chart("Genres", "Ratings", data)
+        except Exception as e:
+            print(f'An unexpected error has occurred {e}')
+    
+    def get_rating_vs_price(self):
+        try:
+            books = self.book_service.get_all_books()
+            data = self.book_analytics_service.rating_vs_price(books)
+            self.chart_service.scatter_chart("Price", "Ratings", data)
         except Exception as e:
             print(f'An unexpected error has occurred {e}')
     
