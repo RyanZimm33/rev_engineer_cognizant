@@ -14,7 +14,7 @@ class CheckoutHistory():
             return ["check_in", self.check_in]
 
     @classmethod
-    def from_dict(cls, data:dict) -> 'CheckoutHistory':     #Match dictionary data to book class
+    def from_dict(cls, data:dict) -> 'CheckoutHistory':     #Match dictionary data to checkout history class
         return cls(**data)
     
     def to_dict(self) -> dict:

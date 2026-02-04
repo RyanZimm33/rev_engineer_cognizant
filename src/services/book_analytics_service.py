@@ -86,8 +86,34 @@ class BookAnalyticsService:
         if not isinstance(books, list) or not all(isinstance(b, Book) for b in books):
             raise TypeError('Expected a Book list, got something else')
         price = [b.price_usd for b in books]
-        release = [b.rating for b in books]
+        rating = [b.rating for b in books]
 
-        return dict(zip(price, release))
+        return dict(zip(price, rating))
+
+    def releases_by_year(self, books: list[Book]) -> dict[int,int]:
+        if not isinstance(books, list) or not all(isinstance(b, Book) for b in books):
+            raise TypeError('Expected a Book list, got something else')
+        release_years = [b.publication_year for b in books]
+        book_dicts = [book.to_dict() for book in books]
+        df = pd.DataFrame(data=book_dicts) 
+        years = np.unique(np.array(release_years))
+        counts = df.groupby("publication_year")["publication_year"].count()
+
+        return dict(zip([int(year) for year in years], counts))
+    
+    def available_vs_unavailable(self, books: list[Book]) -> dict[str, int]:
+        if not isinstance(books, list) or not all(isinstance(b, Book) for b in books):
+            raise TypeError('Expected a Book list, got something else')
+
+        available = 0
+        unavailable = 0
+        for b in books:
+            if b.available:
+                available+=1
+            else:
+                unavailable+=1
+
+        return {"available": available, "unavailable": unavailable}
+
         
 

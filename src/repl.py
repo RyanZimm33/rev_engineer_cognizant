@@ -6,8 +6,9 @@ from src.services.book_analytics_service import BookAnalyticsService
 from src.services.book_service import BookService
 from src.services.checkout_history_service import CheckoutHistoryService
 from src.services.chart_service import ChartService
-import requests
 import uuid
+import requests
+from datetime import datetime
 
 class BookREPL:
     def __init__(self, book_service, book_analytics_service, checkout_history_service, chart_service):
@@ -60,9 +61,9 @@ class BookREPL:
         elif cmd == "ratingVsPrice":
             self.get_rating_vs_price()
         elif cmd == "releasesByYear":
-            pass
+            self.releases_by_year()
         elif cmd == "availableVsUnavailable":
-            pass
+            self.available_vs_unavailable()
         elif cmd == "checkIn":
             self.check_in()
         elif cmd == "checkOut":
@@ -143,6 +144,22 @@ class BookREPL:
         except Exception as e:
             print(f'An unexpected error has occurred {e}')
     
+    def releases_by_year(self):
+        try:
+            books = self.book_service.get_all_books()
+            data = self.book_analytics_service.releases_by_year(books)
+            self.chart_service.line_chart("Year", "Released ", data)
+        except Exception as e:
+            print(f'An unexpected error has occurred {e}')
+    
+    def available_vs_unavailable(self):
+        try:
+            books = self.book_service.get_all_books()
+            data = self.book_analytics_service.available_vs_unavailable(books)
+            self.chart_service.pie_chart(data)
+        except Exception as e:
+            print(f'An unexpected error has occurred {e}')
+    
     def delete_book(self):
         try:
             query = input('Please enter the name of the book to delete: ')
@@ -173,9 +190,10 @@ class BookREPL:
             title = input('Title: ')
             author = input('Author: ')
             book_id = book_id=str(uuid.uuid4())
-            book = Book(book_id= book_id, title= title, author= author)
+            checkout = str(datetime.now())
+            book = Book(book_id= book_id, title= title, author= author, available=False, last_checkout=checkout)
             new_book_id = self.book_service.add_book(book)
-            history = CheckoutHistory(book_id= book_id, check_out= book.check_out)
+            history = CheckoutHistory(book_id= book_id, check_out= checkout)
             self.checkout_history_service.add_checkout_history(history)
             print(new_book_id)
         except Exception as e:

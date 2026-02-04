@@ -1,7 +1,8 @@
 from src.domain.checkout_history import CheckoutHistory
+from src.repositories.checkout_history_repository_protocol import CheckoutHistoryRepositoryProtocol
 
 class CheckoutHistoryService:
-    def __init__(self, repo):
+    def __init__(self, repo: CheckoutHistoryRepositoryProtocol):
         self.repo = repo
     
     def get_all_checkout_history(self) -> list[CheckoutHistory]:
