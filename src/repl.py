@@ -9,6 +9,7 @@ from src.services.chart_service import ChartService
 import uuid
 import requests
 from datetime import datetime
+import json
 
 class BookREPL:
     def __init__(self, book_service, book_analytics_service, checkout_history_service, chart_service):
@@ -100,7 +101,7 @@ class BookREPL:
         try:
             books = self.book_service.get_all_books()
             top_books = self.book_analytics_service.top_rated(books)
-            print(top_books)
+            self.pretty_print(top_books)
         except Exception as e:
             print(f'An unexpected error has occurred {e}')
 
@@ -108,7 +109,7 @@ class BookREPL:
         try:
             books = self.book_service.get_all_books()
             value_scores = self.book_analytics_service.value_scores(books)
-            print(value_scores)
+            self.pretty_print(value_scores)
         except Exception as e:
             print(f'An unexpected error has occurred {e}')
     
@@ -116,7 +117,7 @@ class BookREPL:
         try:
             books = self.book_service.get_all_books()
             median_prices = self.book_analytics_service.median_price_by_genre(books)
-            print(median_prices)
+            self.pretty_print(median_prices)
         except Exception as e:
             print(f'An unexpected error has occurred {e}')
     
@@ -182,7 +183,7 @@ class BookREPL:
 
     def get_all_records(self):
         books = self.book_service.get_all_books()
-        print(books)
+        self.pretty_print(books)
 
     def add_book(self):
         try:
@@ -203,7 +204,7 @@ class BookREPL:
         try:
             query = input('Please enter book name: ')
             books = self.book_service.find_book_by_name(query)
-            print(books)
+            self.pretty_print(books)
         except Exception as e:
             print(f'An unexpected error has occurred {e}')
 
@@ -233,16 +234,33 @@ class BookREPL:
 
     def get_all_checkout_history(self):
         history = self.checkout_history_service.get_all_checkout_history()
-        print(history)
+        self.pretty_print(history)
 
     def get_book_checkout_history(self):
         try:
             query = input('Please enter book name: ')
             book = self.book_service.find_book_by_name(query)[0]
             history = self.checkout_history_service.find_checkout_history_by_book_id(book.book_id)
-            print(history)
+            self.pretty_print(history)
         except Exception as e:
             print(f'An unexpected error has occurred {e}')
+    
+    def to_primitive(self, obj):
+        if obj is None or isinstance(obj, (str, int, float, bool)):
+            return obj
+        if isinstance(obj, dict):
+            return {k: self.to_primitive( v) for k, v in obj.items()}
+        if isinstance(obj, (list, tuple, set)):
+            return [self.to_primitive( v) for v in obj]
+        to_dict = getattr(obj, "to_dict", None)
+        if callable(to_dict):
+            return self.to_primitive(to_dict())
+        if hasattr(obj, "__dict__"):
+            return self.to_primitive(vars(obj))
+        return str(obj)
+
+    def pretty_print(self, obj):
+        print(json.dumps(self.to_primitive(obj), indent=2, ensure_ascii=False, default=str))
 
 
 if __name__ == '__main__':
