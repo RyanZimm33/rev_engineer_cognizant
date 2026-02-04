@@ -23,7 +23,7 @@ class BookCreate(BaseModel):
     publisher_email: Optional[str] = None
  
  
-class BookRead(BookCreate):
+class BookRead(BaseModel):
 
     book_id: UUID
     title: str

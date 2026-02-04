@@ -1,23 +1,28 @@
-import json
+from sqlalchemy.orm import Session
 from src.domain.checkout_history import CheckoutHistory
-from src.repositories.checkout_history_repository_protocol import CheckoutHistoryRepositoryProtocol
+from src.repositories.checkout_history_protocol import CheckoutHistoryRepositoryProtocol
 
-class CheckoutHistoryRepository(CheckoutHistoryRepositoryProtocol):
-    def __init__(self, filepath: str="checkout_history.json"):
-        self.filepath = filepath
+class SQLCheckoutHistoryRepository(CheckoutHistoryRepositoryProtocol):
+    def __init__(self, session: Session):
+        self.session = session
+    
+    def add_record(self, record: CheckoutHistory) -> str:
+        self.session.add(record)
+        self.session.commit()
+    
+    def get_history_for_book(self, book_id: str) -> list[CheckoutHistory]:
+        return (
+            self.session.query(CheckoutHistory)
+            .filter(CheckoutHistory.book_id == book_id)
+            .order_by(CheckoutHistory.checkout_date.asc())
+            .all()
+        )
 
-    def get_all_checkout_history(self) -> list[CheckoutHistory]:
-        with open(self.filepath, 'r', encoding='utf8') as f:  
-            data = json.load(f)
-            return [CheckoutHistory.from_dict(item) for item in data]
+    def get_checkout_history_all(self) ->list[CheckoutHistory]:
+        return self.session.query(CheckoutHistory).all()
     
-    def add_checkout_history(self, history:CheckoutHistory) -> str:
-        checkout_history = self.get_all_checkout_history()
-        checkout_history.append(history)
-        with open(self.filepath, 'w', encoding='utf-8') as f:       
-            json.dump([c.to_dict() for c in checkout_history], f, indent=2)  
-        return history.book_id
-    
-    def find_checkout_history_by_book_id(self, book_id:str) -> list[CheckoutHistory]:
-        checkout_history = self.get_all_checkout_history()
-        return [c for c in checkout_history if c.book_id == book_id]
+    def add_seed_records(self, records: list[CheckoutHistory]) -> None:
+        for r in records:
+            self.session.add(r)
+
+        self.session.commit()

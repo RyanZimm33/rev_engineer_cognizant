@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import os
-import src.domain.book
+import src.domain #Needed so context gets base metadata for all are domain classes, this line grabs everything from __init__.py file
 from src.base import Base
 
 # this is the Alembic Config object, which provides

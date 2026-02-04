@@ -33,3 +33,6 @@ class BookService:
         book.book_id = old_book_id
         self.repo.add_book(book)
         return old_book_id
+    
+    def add_seed_records(self, books:list[Book]) -> None:
+        self.repo.add_seed_records(books)
