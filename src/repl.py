@@ -190,9 +190,12 @@ class BookREPL:
             print("Enter Book Details")
             title = input('Title: ')
             author = input('Author: ')
-            book_id = book_id=str(uuid.uuid4())
+            book_id=str(uuid.uuid4())
             checkout = str(datetime.now())
-            book = Book(book_id= book_id, title= title, author= author, available=False, last_checkout=checkout)
+            book = Book(book_id= book_id, title= title, author= author, 
+                genre="History", publication_year=2000, page_count=400, rating=2.5, rating_count=100, price_usd=100.25, publisher="North Star Press",
+                language="English", format="Hardcover", in_print=True, sales_millions=2.25, last_checkout=checkout, available=False
+            )
             new_book_id = self.book_service.add_book(book)
             history = CheckoutHistory(book_id= book_id, check_out= checkout)
             self.checkout_history_service.add_checkout_history(history)
