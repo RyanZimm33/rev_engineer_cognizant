@@ -5,9 +5,8 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from dotenv import load_dotenv
-load_dotenv()
 
+from src.settings import settings
 import os
 import src.domain #Needed so context gets base metadata for all are domain classes, this line grabs everything from __init__.py file
 from src.base import Base
@@ -16,9 +15,8 @@ from src.base import Base
 # access to the values within the .ini file in use.
 config = context.config
 
-database_url = os.getenv('DATABASE_URL')
-if database_url:
-    config.set_main_option("sqlalchemy.url", database_url)
+
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 
 # Interpret the config file for Python logging.
