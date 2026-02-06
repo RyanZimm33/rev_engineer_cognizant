@@ -30,7 +30,7 @@ class BookREPL:
             self.running = False
             print("Goodbye.")
         elif cmd == 'help':
-            print("           Basic:    addBook, getAllRecords, updateBook, deleteBook, findByName, getJoke") 
+            print("           Basic:    addBook, getAllRecords, updateBook, deleteBook, findByName") 
             print("       Analytics:    getAveragePrice, getTopBooks, getValueScores, getMedianPriceByGenre" )
             print(" Chart Analytics:    mostPopularGenres2026, highestRatedGenres, ratingVsPrice, releasesByYear, availableVsUnavailable" )
             print("Checkout History:    checkIn, checkOut, getAllCheckoutHistory, getBookCheckoutHistory")
@@ -175,9 +175,13 @@ class BookREPL:
             print("Enter Book Details")
             title = input('Title: ')
             author = input('Author: ')
-            book = Book(title= title, author=author)
-            updated_book_id = self.book_service.update_book(query, book)
-            print(updated_book_id)
+            books = self.book_service.find_book_by_name(query)
+            if(len(books) > 0):
+                book = books[0]
+                book.title = title
+                book.author = author
+                updated_book_id = self.book_service.update_book(query, book)
+                print(updated_book_id)
         except Exception as e:
             print(f'An unexpected error has occurred {e}')
 

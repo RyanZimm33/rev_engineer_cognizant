@@ -7,7 +7,7 @@ class BookAnalyticsService:
         if not isinstance(books, list) or not all(isinstance(b, Book) for b in books):
             raise TypeError('Expected a Book list, got something else')
         prices = np.array([b.price_usd for b in books], dtype = float)  #Create array of book prices for all books
-        return prices.mean()
+        return round(prices.mean(),2)
     
     def top_rated(self, books: list[Book], min_ratings: int = 1000, limit: int = 10) -> list[Book]:  #Return a list of books of size limit with the highest average rating and a ratings_count of atleast min_ratings
         if not isinstance(books, list) or not all(isinstance(b, Book) for b in books):
@@ -51,7 +51,7 @@ class BookAnalyticsService:
         genre_medians = {}
         for genre in unique_genres:
             mask = book_genres == genre
-            genre_filtered_book_prices = np.array(book_prices)[mask]
+            genre_filtered_book_prices = np.round(np.array(book_prices)[mask], 2)
             genre_medians[genre] = np.median(genre_filtered_book_prices)
         
         return genre_medians
@@ -76,7 +76,7 @@ class BookAnalyticsService:
         mean_average_rating = df.groupby("genre")["rating"].mean()
         mean_average_rating_all_books = df["rating"].mean()
         m = 50
-
+        
         weighted_rating = (median_ratings_count / (median_ratings_count + m)) * mean_average_rating + (m / (median_ratings_count + m)) * mean_average_rating_all_books
 
         dictionary = dict(zip(book_genres, weighted_rating))
